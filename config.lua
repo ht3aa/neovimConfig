@@ -172,7 +172,17 @@ lvim.plugins = {
     'nvim-lualine/lualine.nvim',
   },
   {
-    "m4xshen/hardtime.nvim",  -- workflow habit
+    'rcarriga/nvim-notify', -- notification
+    config = function()
+      require("notify").setup()
+      vim.notify = require("notify")
+      require("telescope").load_extension("notify")
+    end
+
+  },
+  { 'stevearc/dressing.nvim' }, -- cool ui for all neovim core stuff
+  {
+    "m4xshen/hardtime.nvim", -- workflow habit
     dependencies = { "MunifTanjim/nui.nvim", "nvim-lua/plenary.nvim" },
     opts = {}
   },
