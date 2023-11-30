@@ -4,8 +4,13 @@
 -- Discord: https://discord.com/invite/Xb9B4Ny
 
 
--- alpha plugin
 
+
+-- lir file explorer
+lvim.builtin.lir.show_hidden_files = true
+--
+
+-- alpha plugin
 local banner = {
   [[                                                                         ]],
   [[ ██╗░░██╗░█████╗░░██████╗░█████╗░███╗░░██╗░██╗░░░░░░░██╗███████╗██████╗░ ]],
@@ -43,11 +48,7 @@ lvim.builtin.alpha.dashboard.section.header = {
     hl = "Label",
   },
 }
-
 --
-
-
-
 
 -- which key plugin
 lvim.builtin.which_key.mappings.l = {
@@ -77,12 +78,9 @@ lvim.builtin.which_key.mappings.l = {
   },
   e = { "<cmd>Telescope quickfix<cr>", "Telescope Quickfix" },
 }
-
 lvim.builtin.which_key.mappings.u = {
   "<cmd>UndotreeToggle<cr>", "Undo Tree",
 }
-
-
 lvim.builtin.which_key.mappings.i = {
   name = "Vim Fugitive",
   c = { "<cmd>Git commit<cr>", "Commit" },
@@ -90,30 +88,22 @@ lvim.builtin.which_key.mappings.i = {
   a = { "<cmd>Git add .<cr>", "Add all" },
   l = { "<cmd>Git log<cr>", "Log" },
 }
-
 lvim.builtin.which_key.mappings.a = {
   "<cmd>AerialToggle<cr>", "Aerial Toggle",
 }
 --
 
-
 -- keymaps
 lvim.keys.normal_mode["<S-l>"] = ":bnext<CR>"
 lvim.keys.normal_mode["<S-h>"] = ":bprevious<CR>"
 lvim.keys.normal_mode["<C-n>"] = ":%s/\\<<C-r><C-w>\\>//gI<Left><Left><Left>"
-
 lvim.keys.visual_mode["p"] = '"_dP'
 lvim.keys.visual_mode["J"] = ":m '>+1<CR>gv=gv"
 lvim.keys.visual_mode["K"] = ":m '<-2<CR>gv=gv"
-
-
 lvim.keys.insert_mode["jj"] = "<ESC>"
 --
 
-
-
 -- lsp
-
 local formatters = require "lvim.lsp.null-ls.formatters"
 formatters.setup {
   {
@@ -126,21 +116,15 @@ formatters.setup {
     filetypes = { "blade", "php" },
   }
 }
-
-
-
 local signs = {
-
   { name = "DiagnosticSignError", text = "" },
   { name = "DiagnosticSignWarn", text = "" },
   { name = "DiagnosticSignHint", text = "" },
   { name = "DiagnosticSignInfo", text = "" },
 }
-
 for _, sign in ipairs(signs) do
   vim.fn.sign_define(sign.name, { texthl = sign.name, text = sign.text, numhl = "" })
 end
-
 local config = {
   virtual_text = false, -- disable virtual text
   signs = {
@@ -158,47 +142,45 @@ local config = {
     prefix = "",
   },
 }
-
 vim.diagnostic.config(config)
-
 vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
   border = "rounded",
 })
-
 vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, {
   border = "rounded",
 })
 
-
-
---
 -- options
-
 vim.opt.relativenumber = true
 vim.g.gruvbox_italic = 1
 vim.cmd("autocmd BufNewFile,BufReadPost *.templ set filetype=html")
+lvim.colorscheme = "ofirkai-darkblue"
 
 
-lvim.colorscheme = "ayu-dark"
-
---
 -- plugins
-
 lvim.plugins = {
   { 'mbbill/undotree' },
   { 'tpope/vim-fugitive' },
-  { 'morhetz/gruvbox' },   -- colorscheme
-  { 'Shatur/neovim-ayu' }, -- colorscheme
-  { 'catppuccin/nvim' },   -- colorscheme
+  { 'morhetz/gruvbox' },             -- colorscheme
+  { 'Shatur/neovim-ayu' },           -- colorscheme
+  { 'catppuccin/nvim' },             -- colorscheme
+  { 'marko-cerovac/material.nvim' }, -- colorscheme
+  { 'rose-pine/neovim' },            -- colorscheme
+  { 'ofirgall/ofirkai.nvim' },       -- colorscheme
+  { 'zootedb0t/citruszest.nvim' },   -- colorscheme
   {
     'nvim-lualine/lualine.nvim',
+  },
+  {
+    "m4xshen/hardtime.nvim",  -- workflow habit
+    dependencies = { "MunifTanjim/nui.nvim", "nvim-lua/plenary.nvim" },
+    opts = {}
   },
   {
     'stevearc/aerial.nvim',
     config = function()
       require("aerial").setup()
     end
-
   },
   { 'christoomey/vim-tmux-navigator' },
   {
@@ -212,10 +194,7 @@ lvim.plugins = {
   },
 }
 
---
-
 -- telescope
-
 local actions = require("lvim.utils.modules").require_on_exported_call "telescope.actions"
 lvim.builtin.telescope.defaults.mappings.i = {
   ["<C-j>"] = actions.move_selection_next,
@@ -228,9 +207,5 @@ lvim.builtin.telescope.defaults.mappings.i = {
     actions.open_qflist(...)
   end,
   ["<CR>"] = actions.select_default,
-
 }
-
-
-
 --
