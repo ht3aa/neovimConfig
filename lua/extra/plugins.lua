@@ -1,4 +1,9 @@
 lvim.plugins = {
+  { 'edluffy/hologram.nvim',
+    require('hologram').setup {
+      auto_display = true -- WIP automatic markdown image display, may be prone to breaking
+    }
+  }, -- don't works. idk why (if you delete it you must delete hologram.lua)
   {
     "nvim-neorg/neorg",
     build = ":Neorg sync-parsers",
@@ -29,11 +34,6 @@ lvim.plugins = {
 
   },
   { 'stevearc/dressing.nvim' }, -- cool ui for all neovim core stuff
-  {
-    "m4xshen/hardtime.nvim",    -- workflow habit
-    dependencies = { "MunifTanjim/nui.nvim", "nvim-lua/plenary.nvim" },
-    opts = {}
-  },
   {
     'stevearc/aerial.nvim',
     config = function()
