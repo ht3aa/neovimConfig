@@ -7,3 +7,4 @@ reload "core.telescope"
 reload "core.whichKey"
 reload "core.bufferline"
 reload "extra"
+
