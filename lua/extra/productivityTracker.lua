@@ -18,8 +18,14 @@ function SaveCodeTracker()
   local lastSecond = timeTable.sec
 
   -- Create a formatted string with the date and time information
+  
+  local rootFound = vim.fs.find(root_patterns, { upward = true })
 
-  local root_dir = vim.fs.dirname(vim.fs.find(root_patterns, { upward = true })[1])
+  if rootFound[1] == nil then
+    return
+  end
+
+  local root_dir = vim.fs.dirname(rootFound[1])
   -- Split the path string by directory separator "/"
   local parts = {}
   for part in root_dir:gmatch("[^/]+") do
