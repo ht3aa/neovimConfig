@@ -18,7 +18,7 @@ function SaveCodeTracker()
   local lastSecond = timeTable.sec
 
   -- Create a formatted string with the date and time information
-  
+
   local rootFound = vim.fs.find(root_patterns, { upward = true })
 
   if rootFound[1] == nil then
@@ -39,36 +39,39 @@ function SaveCodeTracker()
   local file = io.open("/mnt/hasanweb/programming/productivityTracker/" .. lastDirectory .. ".csv", "a")
 
 
-    local function execute_command(command)
-        local handle = io.popen(command)
-        local result = handle:read("*a")
-        handle:close()
-        return result
-    end
+  local function execute_command(command)
+    local handle = io.popen(command)
 
-    local function get_last_commit_info()
-        local gitLogCommand = "git log -1 --pretty=format:'%h %s'"
-        return execute_command(gitLogCommand)
-    end
+    if not handle then return nil end
 
-    local lastCommitInfo = get_last_commit_info()
-    print("Last commit info: " .. lastCommitInfo)
+    local result = handle:read("*a")
+    handle:close()
+    return result
+  end
+
+  local function get_last_commit_info()
+    local gitLogCommand = "git log -1 --pretty=format:'%h %s'"
+    return execute_command(gitLogCommand)
+  end
+
+  local lastCommitInfo = get_last_commit_info()
+  print("Last commit info: " .. lastCommitInfo)
 
 
 
-  -- local dateTimeStr = string.format("%d,%d,%d,%d,%d,%d,%d,%s\n", year, month, day, hour, minute, lastSecond,
-  --   ProductivityTrackerInSeconds, root_dir)
+  local dateTimeStr = string.format("%d,%d,%d,%d,%d,%d,%d,%s,%s\n", year, month, day, hour, minute, lastSecond,
+    ProductivityTrackerInSeconds, root_dir, lastCommitInfo)
 
-  -- if file then
-  --   -- Append the formatted string to the file
-  --   file:write(dateTimeStr)
+  if file then
+    -- Append the formatted string to the file
+    file:write(dateTimeStr)
 
-  --   -- Close the file
-  --   file:close()
-  --   print("Data appended to file successfully.")
-  -- else
-  --   print("Error opening the file for appending data.")
-  -- end
+    -- Close the file
+    file:close()
+    print("Data appended to file successfully.")
+  else
+    print("Error opening the file for appending data.")
+  end
 end
 
 local function trackKeyPressed()
@@ -93,7 +96,6 @@ end
 
 vim.on_key(function()
   trackKeyPressed()
-  SaveCodeTracker()
 end)
 
 -- Set up autocmd to call MyQuitFunction when quitting Neovim
