@@ -4,7 +4,7 @@ local time = os.time()
 local timeTable = os.date("*t", time)
 local second = timeTable.sec
 local timer = vim.loop.new_timer()
-local root_patterns = { ".git", ".clang-format", "pyproject.toml", "setup.py" }
+local root_patterns = { ".git" }
 
 currentSecond = second
 
@@ -38,19 +38,37 @@ function SaveCodeTracker()
   -- Open the file in append mode
   local file = io.open("/mnt/hasanweb/programming/productivityTracker/" .. lastDirectory .. ".csv", "a")
 
-  local dateTimeStr = string.format("%d,%d,%d,%d,%d,%d,%d,%s\n", year, month, day, hour, minute, lastSecond,
-    ProductivityTrackerInSeconds, root_dir)
 
-  if file then
-    -- Append the formatted string to the file
-    file:write(dateTimeStr)
+    local function execute_command(command)
+        local handle = io.popen(command)
+        local result = handle:read("*a")
+        handle:close()
+        return result
+    end
 
-    -- Close the file
-    file:close()
-    print("Data appended to file successfully.")
-  else
-    print("Error opening the file for appending data.")
-  end
+    local function get_last_commit_info()
+        local gitLogCommand = "git log -1 --pretty=format:'%h %s'"
+        return execute_command(gitLogCommand)
+    end
+
+    local lastCommitInfo = get_last_commit_info()
+    print("Last commit info: " .. lastCommitInfo)
+
+
+
+  -- local dateTimeStr = string.format("%d,%d,%d,%d,%d,%d,%d,%s\n", year, month, day, hour, minute, lastSecond,
+  --   ProductivityTrackerInSeconds, root_dir)
+
+  -- if file then
+  --   -- Append the formatted string to the file
+  --   file:write(dateTimeStr)
+
+  --   -- Close the file
+  --   file:close()
+  --   print("Data appended to file successfully.")
+  -- else
+  --   print("Error opening the file for appending data.")
+  -- end
 end
 
 local function trackKeyPressed()
@@ -75,6 +93,7 @@ end
 
 vim.on_key(function()
   trackKeyPressed()
+  SaveCodeTracker()
 end)
 
 -- Set up autocmd to call MyQuitFunction when quitting Neovim
