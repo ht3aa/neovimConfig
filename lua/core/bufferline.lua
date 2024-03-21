@@ -1,1 +1,1 @@
-lvim.builtin.bufferline.active = false
+-- lvim.builtin.bufferline.active = false

@@ -1,5 +1,5 @@
 reload("extra.plugins")
 reload("extra.repo")
-reload("extra.neorg")
 reload("extra.productivityTracker")
-reload("extra.notifyVim")
+reload("extra.videoTracker")
+reload("extra.apm")

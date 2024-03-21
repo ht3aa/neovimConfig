@@ -1,4 +1,5 @@
 lvim.builtin.which_key.mappings.b = { "<cmd>Telescope buffers previewer=false<cr>", "Find Buffer" }
+lvim.builtin.which_key.mappings.t = { "<cmd>TroubleToggle<cr>", "Trouble" }
 lvim.builtin.which_key.mappings.B = {
   name = "Buffers",
   j = { "<cmd>BufferLinePick<cr>", "Jump" },
@@ -64,3 +65,4 @@ lvim.builtin.which_key.mappings.i = {
 lvim.builtin.which_key.mappings.a = {
   "<cmd>AerialToggle<cr>", "Aerial Toggle",
 }
+

@@ -7,4 +7,5 @@ reload "core.telescope"
 reload "core.whichKey"
 reload "core.bufferline"
 reload "extra"
+lvim.builtin.nvimtree.setup.view.side = "right"
 
