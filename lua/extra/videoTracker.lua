@@ -199,7 +199,8 @@ function StopVideoTracker()
     lastCommitId:gsub("%s", "-") .. "_project" .. vim.fn.getcwd():gsub("/", "-"):gsub("%.", "") .. ".mkv' Enter")
 
 
-  run_terminal_command_in_tmux("tmux kill-window -t changeVideoName")
+
+  run_terminal_command_in_tmux("tmux send-keys -t 'changeVideoName' 'tmux kill-window' Enter")
 end
 
 

@@ -9,9 +9,12 @@ Also I made a video tracker which record your screen whenver you use lunarvim us
 
 ## How To Use Video Tracker
 1. Add the videoTracker file to your config.
-2. require (tmux, ffmpeg) to be installed
+2. Require (tmux, ffmpeg) to be installed
 3. Change the path of the videosPath variable whenver you want
-4. happy coding
+4. Run tmux
+5. Run your neovim or lunarvim
+6. After done coding don't forget to quit from neovim or lunarvim using :qa (close the tmux or any other action make some errors)
+7. Happy coding
 
 ## How To Use Productivity Tracker
 1. Add the productivityTracker file to your config.
