@@ -1,5 +1,15 @@
 local videosPath = "/mnt/hasanweb/programming/videoTracker/"
 
+local function get_user_input(message)
+  -- Use vim.fn.input to prompt for user input
+  local user_input = vim.fn.input(message)
+  -- Check if user pressed cancel (returns nil)
+  if user_input == nil then
+    return "nil"
+  end
+  return user_input
+end
+
 -- Function to create a directory
 local function createDirectory(directory)
   vim.fn.mkdir(directory)
@@ -91,11 +101,13 @@ function StartVideoTracker()
   createMonthDirectoryIfNeeded()
   createDayDirectoryIfNeeded()
 
+  local videoName = get_user_input("Enter video name: ")
   local lastCommitInfo = get_last_commit_info()
 
   if lastCommitInfo == nil then
     lastCommitInfo = "null"
   end
+
 
   if not tmux_window_exists("videoTracker") then
     run_terminal_command_in_tmux(
@@ -103,7 +115,8 @@ function StartVideoTracker()
       os.date("%Y") ..
       "/" ..
       os.date("%m") ..
-      "/" .. os.date("%d") .. "/" .. os.date("%H-%M-%S") .. "-" .. lastCommitInfo:gsub("%s", "-") .. ".mkv")
+      "/" ..
+      os.date("%d") .. "/" .. os.date("%H-%M-%S") .. "-" .. lastCommitInfo:gsub("%s", "-") .. "_video_name_" .. videoName:gsub("%s", "_") .. ".mkv")
   else
     print("videoTracker window is already open.")
   end
@@ -112,7 +125,6 @@ end
 function StopVideoTracker()
   run_terminal_command_in_tmux("pkill ffmpeg")
 end
-
 
 vim.cmd([[autocmd VimEnter * lua StartVideoTracker()]])
 vim.cmd([[autocmd VimLeave * lua StopVideoTracker()]])
