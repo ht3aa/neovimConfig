@@ -1,5 +1,20 @@
 local videosPath = "/mnt/hasanweb/programming/videoTracker/"
 
+-- Define the set of characters to choose from
+local charset = "1234567890qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM"
+
+-- Function to generate a random string of given length from the charset
+local function random_string(length)
+  math.randomseed(os.time()) -- Seed the random number generator
+  local random_str = ""
+  for _ = 1, length do
+    local rand_index = math.random(1, #charset)
+    random_str = random_str .. charset:sub(rand_index, rand_index)
+  end
+  return random_str
+end
+
+-- Function to prompt user for input and append a random string
 local function get_user_input(message)
   -- Use vim.fn.input to prompt for user input
   local user_input = vim.fn.input(message)
@@ -7,11 +22,13 @@ local function get_user_input(message)
   if user_input == nil then
     return "nil"
   end
+  -- Append a random 10-character string from the charset
+  user_input = user_input:gsub("%s", "_")
   return user_input
 end
 
-
-local videoName = get_user_input("Enter video name: ")
+local startVideoName = get_user_input("Enter start video name: ")
+local randomString = random_string(10)
 
 
 -- Function to create a directory
@@ -98,17 +115,6 @@ local function get_last_commit_info()
 end
 
 
-function split(inputstr, sep)
-  if sep == nil then
-    sep = "%s"
-  end
-  local t = {}
-  for str in string.gmatch(inputstr, "([^" .. sep .. "]+)") do
-    table.insert(t, str)
-  end
-  return t
-end
-
 local function get_last_commit_id()
   -- Get the last commit info
   local commit_info = get_last_commit_info()
@@ -143,44 +149,47 @@ function StartVideoTracker()
       os.date("%m") ..
       "/" ..
       os.date("%d") ..
-      "/" .. os.date("%H-%M-%S") .. "_video_name_" .. videoName:gsub("%s", "_") .. ".mkv")
+      "/" .. randomString .. ".mkv")
   else
     print("videoTracker window is already open.")
   end
 end
 
+
 function StopVideoTracker()
   run_terminal_command_in_tmux("tmux kill-window -t videoTracker")
 
-  local lastCommitIdInfo = get_last_commit_id()
+  local lastCommitId = get_last_commit_id()
+  local endVideoName = get_user_input("Enter end video name: ")
 
-  if lastCommitIdInfo == nil then
-    lastCommitIdInfo = "null"
+  if lastCommitId == nil then
+    lastCommitId = "null"
   end
 
-  execute_command("mv "
+  -- wait_one_second()
+
+  run_terminal_command_in_tmux("tmux new-window -n changeVideoName -c "
     ..
     videosPath ..
-    "/" ..
     os.date("%Y") ..
     "/" ..
     os.date("%m") ..
     "/" ..
-    os.date("%d") ..
-    "/" ..
+    os.date("%d"))
+
+  run_terminal_command_in_tmux("tmux send-keys 'mv " .. randomString .. ".mkv "
+    ..
     os.date("%H-%M-%S") ..
-    "_video_name_" ..
-    videoName:gsub("%s", "_") ..
-    ".mkv " ..
-    videosPath ..
-    "/" ..
-    os.date("%Y") ..
-    "/" ..
-    os.date("%m") ..
-    "/" ..
-    os.date("%d") ..
-    "/" .. os.date("%H-%M-%S") .. "_" .. lastCommitIdInfo .. "_video_name_" .. videoName:gsub("%s", "_") .. ".mkv")
+    "_start-" ..
+    startVideoName ..
+    "_end-" ..
+    endVideoName ..
+    "_commit-" ..
+    lastCommitId:gsub("%s", "-") .. "_project" .. vim.fn.getcwd():gsub("/", "-"):gsub("%.", "") .. ".mkv' Enter")
+
+
 end
+
 
 vim.cmd([[autocmd VimEnter * lua StartVideoTracker()]])
 vim.cmd([[autocmd VimLeave * lua StopVideoTracker()]])
