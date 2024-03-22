@@ -10,6 +10,10 @@ local function get_user_input(message)
   return user_input
 end
 
+
+local videoName = get_user_input("Enter video name: ")
+
+
 -- Function to create a directory
 local function createDirectory(directory)
   vim.fn.mkdir(directory)
@@ -58,7 +62,7 @@ end
 
 
 local function run_terminal_command_in_tmux(command)
-  os.execute('tmux new-window -n videoTracker "' .. command .. '"')
+  os.execute(command)
 end
 
 
@@ -94,6 +98,33 @@ local function get_last_commit_info()
 end
 
 
+function split(inputstr, sep)
+  if sep == nil then
+    sep = "%s"
+  end
+  local t = {}
+  for str in string.gmatch(inputstr, "([^" .. sep .. "]+)") do
+    table.insert(t, str)
+  end
+  return t
+end
+
+local function get_last_commit_id()
+  -- Get the last commit info
+  local commit_info = get_last_commit_info()
+
+  -- Check if info was retrieved successfully
+  if commit_info == nil then
+    return "nil"
+  end
+
+  -- Split the info by space (assuming ID is first)
+  local split_info = split(commit_info, "%s")
+
+  -- Return the first element (assuming it's the ID)
+  return split_info[1]
+end
+
 
 
 function StartVideoTracker()
@@ -101,29 +132,54 @@ function StartVideoTracker()
   createMonthDirectoryIfNeeded()
   createDayDirectoryIfNeeded()
 
-  local videoName = get_user_input("Enter video name: ")
-  local lastCommitInfo = get_last_commit_info()
-
-  if lastCommitInfo == nil then
-    lastCommitInfo = "null"
-  end
 
 
   if not tmux_window_exists("videoTracker") then
     run_terminal_command_in_tmux(
-      "ffmpeg -video_size 1366x768 -framerate 10 -f x11grab -i :1 -crf 40 -preset veryfast " .. videosPath ..
+      "tmux new-window -n videoTracker ffmpeg -video_size 1366x768 -framerate 10 -f x11grab -i :1 -crf 40 -preset veryfast " ..
+      videosPath ..
       os.date("%Y") ..
       "/" ..
       os.date("%m") ..
       "/" ..
-      os.date("%d") .. "/" .. os.date("%H-%M-%S") .. "-" .. lastCommitInfo:gsub("%s", "-") .. "_video_name_" .. videoName:gsub("%s", "_") .. ".mkv")
+      os.date("%d") ..
+      "/" .. os.date("%H-%M-%S") .. "_video_name_" .. videoName:gsub("%s", "_") .. ".mkv")
   else
     print("videoTracker window is already open.")
   end
 end
 
 function StopVideoTracker()
-  run_terminal_command_in_tmux("pkill ffmpeg")
+  run_terminal_command_in_tmux("tmux kill-window -t videoTracker")
+
+  local lastCommitIdInfo = get_last_commit_id()
+
+  if lastCommitIdInfo == nil then
+    lastCommitIdInfo = "null"
+  end
+
+  execute_command("mv "
+    ..
+    videosPath ..
+    "/" ..
+    os.date("%Y") ..
+    "/" ..
+    os.date("%m") ..
+    "/" ..
+    os.date("%d") ..
+    "/" ..
+    os.date("%H-%M-%S") ..
+    "_video_name_" ..
+    videoName:gsub("%s", "_") ..
+    ".mkv " ..
+    videosPath ..
+    "/" ..
+    os.date("%Y") ..
+    "/" ..
+    os.date("%m") ..
+    "/" ..
+    os.date("%d") ..
+    "/" .. os.date("%H-%M-%S") .. "_" .. lastCommitIdInfo .. "_video_name_" .. videoName:gsub("%s", "_") .. ".mkv")
 end
 
 vim.cmd([[autocmd VimEnter * lua StartVideoTracker()]])
