@@ -3,7 +3,6 @@ local currentSecond
 local time = os.time()
 local timeTable = os.date("*t", time)
 local second = timeTable.sec
-local timer = vim.loop.new_timer()
 local root_patterns = { ".git" }
 
 currentSecond = second
@@ -59,8 +58,8 @@ function SaveCodeTracker()
 
 
 
-  local dateTimeStr = string.format("%d,%d,%d,%d,%d,%d,%d,%s,%s\n", year, month, day, hour, minute, lastSecond,
-    ProductivityTrackerInSeconds, root_dir, lastCommitInfo)
+  local dateTimeStr = string.format("%d,%d,%d,%d,%d,%d,%d,%s,%s,%s,%s\n", year, month, day, hour, minute, lastSecond,
+    ProductivityTrackerInSeconds, root_dir, lastCommitInfo, StartVideoName, EndVideoName)
 
   if file then
     -- Append the formatted string to the file
@@ -99,4 +98,3 @@ vim.on_key(function()
 end)
 
 -- Set up autocmd to call MyQuitFunction when quitting Neovim
-vim.cmd([[autocmd VimLeave * lua SaveCodeTracker()]])

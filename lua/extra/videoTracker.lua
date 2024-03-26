@@ -27,7 +27,28 @@ local function get_user_input(message)
   return user_input
 end
 
-local startVideoName = get_user_input("Enter start video name: ")
+
+local function isLvimWindowExists()
+  local handle = io.popen('tmux list-windows')
+
+  if handle == nil then
+    return false
+  end
+
+  local result = handle:read("*a")
+  handle:close()
+
+  local count = 0
+  for _ in string.gmatch(result, "nvim") do
+    count = count + 1
+  end
+
+  return count == 1
+end
+
+StartVideoName = get_user_input("Enter start video name: ")
+EndVideoName = ""
+
 local randomString = random_string(10)
 
 
@@ -144,6 +165,8 @@ end
 
 
 
+
+
 function StartVideoTracker()
   createYearDirectoryIfNeeded()
   createMonthDirectoryIfNeeded()
@@ -152,26 +175,30 @@ function StartVideoTracker()
 
 
   if not tmux_window_exists("videoTracker") then
+    run_terminal_command_in_tmux("tmux new-window -n videoTracker -c ")
     run_terminal_command_in_tmux(
-      "tmux new-window -n videoTracker ffmpeg -video_size 1366x768 -framerate 10 -f x11grab -i :1 -crf 40 -preset veryfast " ..
+      "tmux send-keys -t videoTracker 'ffmpeg -video_size 1366x768 -probesize 800M -framerate 10 -f x11grab -i :1 -crf 40 -preset veryfast " ..
       videosPath ..
       os.date("%Y") ..
       "/" ..
       os.date("%m") ..
       "/" ..
       os.date("%d") ..
-      "/" .. randomString .. ".mkv")
+      "/" .. randomString .. ".mkv' Enter")
   else
     print("videoTracker window is already open.")
   end
 end
 
-
 function StopVideoTracker()
+  if not isLvimWindowExists() then
+    return
+  end
   run_terminal_command_in_tmux("tmux kill-window -t videoTracker")
+  execute_command("pkill ffmpeg")
 
   local lastCommitId = get_last_commit_id()
-  local endVideoName = get_user_input("Enter end video name: ")
+  EndVideoName = get_user_input("Enter end video name: ")
 
   if lastCommitId == nil then
     lastCommitId = "null"
@@ -188,21 +215,20 @@ function StopVideoTracker()
     "/" ..
     os.date("%d"))
 
-  run_terminal_command_in_tmux("tmux send-keys 'mv " .. randomString .. ".mkv "
+  run_terminal_command_in_tmux("tmux send-keys -t 'changeVideoName' 'mv " .. randomString .. ".mkv "
     ..
     os.date("%H-%M-%S") ..
-    "_start-" ..
-    startVideoName ..
-    "_end-" ..
-    endVideoName ..
-    "_commit-" ..
-    lastCommitId:gsub("%s", "-") .. "_project" .. vim.fn.getcwd():gsub("/", "-"):gsub("%.", "") .. ".mkv' Enter")
+    "_start_" ..
+    StartVideoName ..
+    "_end_" ..
+    EndVideoName ..
+    "_commit_" ..
+    lastCommitId:gsub("%s", "_") .. "_project" .. vim.fn.getcwd():gsub("/", "_"):gsub("%.", "") .. ".mkv' Enter")
 
 
 
   run_terminal_command_in_tmux("tmux send-keys -t 'changeVideoName' 'tmux kill-window' Enter")
 end
 
+print(isLvimWindowExists())
 
-vim.cmd([[autocmd VimEnter * lua StartVideoTracker()]])
-vim.cmd([[autocmd VimLeave * lua StopVideoTracker()]])
