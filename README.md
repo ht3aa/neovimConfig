@@ -28,7 +28,10 @@ vim.cmd([[autocmd VimLeave * lua StopVideoTracker()]])
 vim.cmd([[autocmd VimLeave * lua SaveCodeTracker()]])
 ```
 
-3. install the cli by running "sudo npm install typingtracker" 
+3. install the cli by running 
+```
+sudo npm install -g typingtracker
+```
 4. allow permission to the installed packege by first see the path of your npm global packages
 ```
 npm root -g
