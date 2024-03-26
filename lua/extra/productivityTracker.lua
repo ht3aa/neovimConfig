@@ -35,7 +35,7 @@ function SaveCodeTracker()
   local lastDirectory = parts[#parts]
 
   -- Open the file in append mode
-  local file = io.open("/mnt/hasanweb/programming/productivityTracker_ts/workFiles/" .. lastDirectory .. ".csv", "a")
+  local file = io.open("/usr/local/lib/node_modules/productivitytracker/workFiles/" .. lastDirectory .. ".csv", "a")
 
 
   local function execute_command(command)
