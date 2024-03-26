@@ -2,19 +2,23 @@
 
 
 ## Important
-I made a productivity tracker which caclulate the time spent on typing in keyboard.
-then store it in file inside the path "/mnt/hasanweb/programming/productivityTracker/".
-Also I made a video tracker which record your screen whenver you use lunarvim using ffmpeg 
-
+This configration configer lunarvim. It has 2 features that can work on any neovim or lunarvim environment. ProductivityTracker and VideoTracker
 
 ## How To Use Video Tracker
 1. Add the videoTracker file to your config.
-2. Require (tmux, ffmpeg) to be installed
-3. Change the path of the videosPath variable whenver you want
-4. Run tmux
-5. Run your neovim or lunarvim
-6. After done coding don't forget to quit from neovim or lunarvim using :qa (close the tmux or any other action make some errors)
-7. Happy coding
+2. Add this code to your config
+
+```
+vim.cmd([[autocmd VimEnter * lua StartVideoTracker()]])
+vim.cmd([[autocmd VimLeave * lua StopVideoTracker()]])
+```
+
+3. Require (tmux, ffmpeg) to be installed
+4. Change the path of the videosPath variable whenver you want
+5. Run tmux
+6. Run your neovim or lunarvim
+7. After done coding don't forget to quit from neovim or lunarvim using :qa (close the tmux or any other action make some errors)
+8. Happy coding
 
 ## How To Use Productivity Tracker
 1. Add the productivityTracker file to your config.

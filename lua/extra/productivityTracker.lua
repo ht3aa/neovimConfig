@@ -7,6 +7,17 @@ local root_patterns = { ".git" }
 
 currentSecond = second
 
+
+  local function execute_command(command)
+    local handle = io.popen(command)
+
+    if not handle then return nil end
+
+    local result = handle:read("*a")
+    handle:close()
+    return result
+  end
+
 function SaveCodeTracker()
   -- Retrieve day, hour, minute, and second
   local year = timeTable.year
@@ -35,18 +46,9 @@ function SaveCodeTracker()
   local lastDirectory = parts[#parts]
 
   -- Open the file in append mode
-  local file = io.open("/usr/local/lib/node_modules/productivitytracker/workFiles/" .. lastDirectory .. ".csv", "a")
+  local file = io.open(execute_command("npm root -g") .. "/productivitytracker/workFiles/" .. lastDirectory .. ".csv", "a")
 
 
-  local function execute_command(command)
-    local handle = io.popen(command)
-
-    if not handle then return nil end
-
-    local result = handle:read("*a")
-    handle:close()
-    return result
-  end
 
   local function get_last_commit_info()
     local gitLogCommand = "git log -1 --pretty=format:'%h %s'"
