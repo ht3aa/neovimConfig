@@ -2,7 +2,8 @@
 
 
 ## Important
-This configration configer lunarvim. It has 2 features that can work on any neovim or lunarvim environment. ProductivityTracker and VideoTracker
+This configration configer lunarvim. It has 2 features that can work on any neovim or lunarvim environment. typingTracker and VideoTracker
+clone this repo to get everything ready. (it should works fine in linux systems)
 
 ## How To Use Video Tracker
 1. Add the videoTracker file to your config.
@@ -20,18 +21,26 @@ vim.cmd([[autocmd VimLeave * lua StopVideoTracker()]])
 7. After done coding don't forget to quit from neovim or lunarvim using :qa (close the tmux or any other action make some errors)
 8. Happy coding
 
-## How To Use Productivity Tracker
-1. Add the productivityTracker file to your config.
-2. Change the path in line 33 to your desired path. This folder will contain files that stores data about your 
-current productivity at specific project.
+## How To Use Typing Tracker
+1. Add the typingTracker file to your config.
+2. Add this code to your config
 ```
-/mnt/hasanweb/programming/productivityTracker/ => /your/path/
+vim.cmd([[autocmd VimLeave * lua SaveCodeTracker()]])
 ```
-3. Each projects your work on should contain .git folder to specify the root of your proejct.
-<br />
 
-that it you can work and whenver you leave your LunarVim or neovim environment. the data will saved
-in the path you specifiy in csv format
+3. install the cli by running "sudo npm install typingtracker" 
+4. allow permission to the installed packege by first see the path of your npm global packages
 ```
-year,month,day,hour,minute,second,typing time in seconds, path of the working project
+npm root -g
+```
+this will output something like this "/usr/local/lib/node_modules"
+then 
+```
+sudo chown -R <username> /usr/local/lib/node_modules/typingtracker
+```
+
+that it you can work and whenver you leave your LunarVim or neovim environment. format of the data
+
+```
+year,month,day,hour,minute,second,typing time in seconds, path of the working project, last commit msg, start of video tracker, end of video tracker
 ```

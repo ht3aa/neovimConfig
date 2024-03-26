@@ -230,5 +230,4 @@ function StopVideoTracker()
   run_terminal_command_in_tmux("tmux send-keys -t 'changeVideoName' 'tmux kill-window' Enter")
 end
 
-print(isLvimWindowExists())
 

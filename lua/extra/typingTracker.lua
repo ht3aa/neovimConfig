@@ -43,10 +43,10 @@ function SaveCodeTracker()
   end
 
   -- Retrieve the last directory
-  local lastDirectory = parts[#parts]
+  local lastFile = parts[#parts]
 
   -- Open the file in append mode
-  local file = io.open(execute_command("npm root -g") .. "/productivitytracker/workFiles/" .. lastDirectory .. ".csv", "a")
+  local file = io.open(execute_command("npm root -g"):match("(.-)\n") .. "/typingtracker/workFiles/" .. lastFile .. ".csv", "a")
 
 
 
@@ -71,7 +71,7 @@ function SaveCodeTracker()
     file:close()
     print("Data appended to file successfully.")
   else
-    print("Error opening the file for appending data.")
+    -- print("Error opening the file for appending data.")
   end
 end
 
@@ -99,4 +99,4 @@ vim.on_key(function()
   trackKeyPressed()
 end)
 
--- Set up autocmd to call MyQuitFunction when quitting Neovim
+

@@ -1,5 +1,5 @@
 reload("extra.plugins")
 reload("extra.repo")
-reload("extra.productivityTracker")
+reload("extra.typingTracker")
 reload("extra.videoTracker")
 reload("extra.apm")
