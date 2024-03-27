@@ -19,6 +19,7 @@ local function execute_command(command)
 end
 
 
+TypingTrackerDir = "/tmp/typingtracker/"
 WorkDataDir = "/tmp/typingtracker/workFiles/"
 
 local exists = function(path)
@@ -31,7 +32,11 @@ local exists = function(path)
   end
 end
 
-if not exists() then
+if not exists(TypingTrackerDir) then
+  os.execute("mkdir " .. TypingTrackerDir)
+end
+
+if not exists(WorkDataDir) then
   os.execute("mkdir " .. WorkDataDir)
 end
 
