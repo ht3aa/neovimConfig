@@ -28,22 +28,16 @@ vim.cmd([[autocmd VimLeave * lua StopVideoTracker()]])
 vim.cmd([[autocmd VimLeave * lua SaveCodeTracker()]])
 ```
 
-3. install the cli by running 
+3. Run neovim and make some movement or typing and then quit so that the folders and data will be created and stored in /tmp/typingtracker/workFiles/ path 
+
+
+4. install the cli by running 
 ```
 sudo npm install -g typingtracker
 ```
-4. allow permission to the installed packege by first see the path of your npm global packages
-```
-npm root -g
-```
-this will output something like this "/usr/local/lib/node_modules"
-then 
-```
-sudo chown -R <username> /usr/local/lib/node_modules/typingtracker
-```
 
-that it you can work and whenver you leave your LunarVim or neovim environment. format of the data
-
+after that you can run 
 ```
-year,month,day,hour,minute,second,typing time in seconds, path of the working project, last commit msg, start of video tracker, end of video tracker
+typingtracker
 ```
+enjoy seeing your typing time.
