@@ -46,7 +46,7 @@ function SaveCodeTracker()
   local lastFile = parts[#parts]
 
   -- Open the file in append mode
-  local file = io.open(execute_command("npm root -g"):match("(.-)\n") .. "/typingtracker/workFiles/" .. lastFile .. ".csv", "a")
+  local file = io.open("/tmp/typingtracker/workFiles/" .. lastFile .. ".csv", "a")
 
 
 
