@@ -8,15 +8,32 @@ local root_patterns = { ".git" }
 currentSecond = second
 
 
-  local function execute_command(command)
-    local handle = io.popen(command)
+local function execute_command(command)
+  local handle = io.popen(command)
 
-    if not handle then return nil end
+  if not handle then return nil end
 
-    local result = handle:read("*a")
-    handle:close()
-    return result
+  local result = handle:read("*a")
+  handle:close()
+  return result
+end
+
+
+WorkDataDir = "/tmp/typingtracker/workFiles/"
+
+local exists = function(path)
+  local file = io.open(path, "r")
+  if file then
+    file:close()
+    return true
+  else
+    return false
   end
+end
+
+if not exists() then
+  os.execute("mkdir " .. WorkDataDir)
+end
 
 function SaveCodeTracker()
   -- Retrieve day, hour, minute, and second
@@ -46,7 +63,7 @@ function SaveCodeTracker()
   local lastFile = parts[#parts]
 
   -- Open the file in append mode
-  local file = io.open("/tmp/typingtracker/workFiles/" .. lastFile .. ".csv", "a")
+  local file = io.open(WorkDataDir .. lastFile .. ".csv", "a")
 
 
 
@@ -98,5 +115,3 @@ end
 vim.on_key(function()
   trackKeyPressed()
 end)
-
-
