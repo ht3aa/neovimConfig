@@ -19,26 +19,7 @@ local function execute_command(command)
 end
 
 
-TypingTrackerDir = "/tmp/typingtracker/"
-WorkDataDir = "/tmp/typingtracker/workFiles/"
 
-local exists = function(path)
-  local file = io.open(path, "r")
-  if file then
-    file:close()
-    return true
-  else
-    return false
-  end
-end
-
-if not exists(TypingTrackerDir) then
-  os.execute("mkdir " .. TypingTrackerDir)
-end
-
-if not exists(WorkDataDir) then
-  os.execute("mkdir " .. WorkDataDir)
-end
 
 function SaveCodeTracker()
   -- Retrieve day, hour, minute, and second
@@ -68,7 +49,7 @@ function SaveCodeTracker()
   local lastFile = parts[#parts]
 
   -- Open the file in append mode
-  local file = io.open(WorkDataDir .. lastFile .. ".csv", "a")
+  local file = io.open("/mnt/hasanweb/programming/workFiles/" .. lastFile .. ".csv", "a")
 
 
 
@@ -82,8 +63,8 @@ function SaveCodeTracker()
 
 
 
-  local dateTimeStr = string.format("%d,%d,%d,%d,%d,%d,%d,%s,%s,%s,%s\n", year, month, day, hour, minute, lastSecond,
-    ProductivityTrackerInSeconds, root_dir, lastCommitInfo, StartVideoName, EndVideoName)
+  local dateTimeStr = string.format("%d,%d,%d,%d,%d,%d,%d,%s,%s,%s\n", year, month, day, hour, minute, lastSecond,
+    ProductivityTrackerInSeconds, root_dir, lastCommitInfo, FeatureName)
 
   if file then
     -- Append the formatted string to the file
