@@ -1,12 +1,12 @@
 ProductivityTrackerInSeconds = 0
 local currentSecond
 local time = os.time()
+local currentTime = os.time()
 local timeTable = os.date("*t", time)
 local second = timeTable.sec
 local root_patterns = { ".git" }
 
 currentSecond = second
-
 
 local rootFound = vim.fs.find(root_patterns, { upward = true })
 
@@ -28,7 +28,7 @@ end
 
 local function time_spent_in_neovim()
     local end_time = os.time()
-    local diff_time = os.difftime(end_time, time)
+    local diff_time = os.difftime(end_time, currentTime)
 
   return diff_time
 end
@@ -77,7 +77,7 @@ function SaveCodeTracker()
 
 
   local dateTimeStr = string.format("%d,%d,%d,%d,%d,%d,%d,%d,%s,%s,%s\n", year, month, day, hour, minute, lastSecond,
-    ProductivityTrackerInSeconds, time_spent_in_neovim(), root_dir, lastCommitInfo, FeatureName)
+    ProductivityTrackerInSeconds, time_spent_in_neovim() , root_dir, lastCommitInfo, FeatureName)
 
   if file then
     -- Append the formatted string to the file
@@ -87,11 +87,13 @@ function SaveCodeTracker()
     file:close()
     print("Data appended to file successfully.")
   else
-    -- print("Error opening the file for appending data.")
+    print("Error opening the file for appending data.")
   end
+
 end
 
 local function trackKeyPressed()
+
   -- Get the current date and time
   time = os.time()
 
