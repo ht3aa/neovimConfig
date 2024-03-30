@@ -1,8 +1,10 @@
 ProductivityTrackerInSeconds = 0
 local currentSecond
 local time = os.time()
-local currentTime = os.time()
+local timeOfLvimStart = os.time()
 local timeTable = os.date("*t", time)
+local time_spent_thinking_or_searching = 0
+local time_spent_not_typing = os.time()
 local second = timeTable.sec
 local root_patterns = { ".git" }
 
@@ -26,9 +28,9 @@ local function execute_command(command)
   return result
 end
 
-local function time_spent_in_neovim()
-    local end_time = os.time()
-    local diff_time = os.difftime(end_time, currentTime)
+local function get_diff_between_past_and_current_time(oldTime)
+  local end_time = os.time()
+  local diff_time = os.difftime(end_time, oldTime)
 
   return diff_time
 end
@@ -72,12 +74,13 @@ function SaveCodeTracker()
   end
 
   local lastCommitInfo = get_last_commit_info()
-  print("Last commit info: " .. lastCommitInfo)
 
 
 
-  local dateTimeStr = string.format("%d,%d,%d,%d,%d,%d,%d,%d,%s,%s,%s\n", year, month, day, hour, minute, lastSecond,
-    ProductivityTrackerInSeconds, time_spent_in_neovim() , root_dir, lastCommitInfo, FeatureName)
+  local dateTimeStr = string.format("%d,%d,%d,%d,%d,%d,%d,%d,%d,%s,%s,%s\n", year, month, day, hour, minute, lastSecond,
+    ProductivityTrackerInSeconds, get_diff_between_past_and_current_time(timeOfLvimStart),
+    time_spent_thinking_or_searching, root_dir, lastCommitInfo,
+    FeatureName)
 
   if file then
     -- Append the formatted string to the file
@@ -85,7 +88,6 @@ function SaveCodeTracker()
 
     -- Close the file
     file:close()
-    print("Data appended to file successfully.")
   else
     print("Error opening the file for appending data.")
   end
@@ -93,7 +95,6 @@ function SaveCodeTracker()
 end
 
 local function trackKeyPressed()
-
   -- Get the current date and time
   time = os.time()
 
@@ -110,13 +111,36 @@ local function trackKeyPressed()
     currentSecond = second
   end
 
-  -- print("second: " .. second, "currentSecond: " .. currentSecond, "ProductivityTrackerInSeconds: " .. ProductivityTrackerInSeconds)
 end
+
+
+
+local inputOpened = false;
+local function checkIfHeIsThinkingOrSearching()
+  local diff_time = get_diff_between_past_and_current_time(time_spent_not_typing)
+  local userInput = ""
+  if diff_time >= 60 then
+    vim.schedule(function()
+      if not inputOpened then
+        inputOpened = true;
+        userInput = vim.fn.input("was you thinking/searching or wasting time (y/n)? ")
+      end
+
+      if userInput == "y" then
+        time_spent_thinking_or_searching = time_spent_thinking_or_searching + diff_time
+      end
+        inputOpened = false;
+    end)
+  end
+
+  time_spent_not_typing = os.time()
+end
+
+
 
 vim.on_key(function()
   trackKeyPressed()
+  checkIfHeIsThinkingOrSearching()
 end)
-
-
 
 
