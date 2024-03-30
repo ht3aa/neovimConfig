@@ -8,6 +8,14 @@ local root_patterns = { ".git" }
 currentSecond = second
 
 
+local rootFound = vim.fs.find(root_patterns, { upward = true })
+
+if rootFound[1] == nil then
+  vim.fn.input("not a git repo. make it now to record your productivity")
+  return
+end
+
+
 local function execute_command(command)
   local handle = io.popen(command)
 
@@ -18,7 +26,12 @@ local function execute_command(command)
   return result
 end
 
+local function time_spent_in_neovim()
+    local end_time = os.time()
+    local diff_time = os.difftime(end_time, time)
 
+  return diff_time
+end
 
 
 function SaveCodeTracker()
@@ -63,8 +76,8 @@ function SaveCodeTracker()
 
 
 
-  local dateTimeStr = string.format("%d,%d,%d,%d,%d,%d,%d,%s,%s,%s\n", year, month, day, hour, minute, lastSecond,
-    ProductivityTrackerInSeconds, root_dir, lastCommitInfo, FeatureName)
+  local dateTimeStr = string.format("%d,%d,%d,%d,%d,%d,%d,%d,%s,%s,%s\n", year, month, day, hour, minute, lastSecond,
+    ProductivityTrackerInSeconds, time_spent_in_neovim(), root_dir, lastCommitInfo, FeatureName)
 
   if file then
     -- Append the formatted string to the file
@@ -101,3 +114,7 @@ end
 vim.on_key(function()
   trackKeyPressed()
 end)
+
+
+
+

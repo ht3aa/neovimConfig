@@ -174,27 +174,27 @@ vim.g.random_string = ""
 
 
 function StartVideoTracker()
+
+  if tmux_window_exists("videoTracker") then
+    return
+  end
+
   createYearDirectoryIfNeeded()
   createMonthDirectoryIfNeeded()
   createDayDirectoryIfNeeded()
 
-  if not tmux_window_exists("videoTracker") then
-    vim.g.random_string = random_string(10)
-    -- StartVideoName = get_user_input("Enter start video name: ")
+  vim.g.random_string = random_string(10)
 
-    run_terminal_command_in_tmux("tmux new-window -n videoTracker -c ")
-    run_terminal_command_in_tmux(
-      "tmux send-keys -t videoTracker 'ffmpeg -video_size 1366x768 -probesize 800M -framerate 10 -f x11grab -i :1 -crf 40 -preset veryfast " ..
-      videosPath ..
-      os.date("%Y") ..
-      "/" ..
-      os.date("%m") ..
-      "/" ..
-      os.date("%d") ..
-      "/" .. vim.g.random_string .. ".mkv' Enter")
-  else
-    print("videoTracker window is already open.")
-  end
+  run_terminal_command_in_tmux("tmux new-window -n videoTracker -c ")
+  run_terminal_command_in_tmux(
+    "tmux send-keys -t videoTracker 'ffmpeg -video_size 1366x768 -probesize 800M -framerate 10 -f x11grab -i :1 -crf 40 -preset veryfast " ..
+    videosPath ..
+    os.date("%Y") ..
+    "/" ..
+    os.date("%m") ..
+    "/" ..
+    os.date("%d") ..
+    "/" .. vim.g.random_string .. ".mkv' Enter")
 end
 
 function StopVideoTracker()
@@ -237,4 +237,3 @@ function StopVideoTracker()
 
   run_terminal_command_in_tmux("tmux send-keys -t 'changeVideoName' 'tmux kill-window' Enter")
 end
-
