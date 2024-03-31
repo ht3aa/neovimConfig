@@ -123,7 +123,7 @@ local function checkIfHeIsThinkingOrSearching()
     vim.schedule(function()
       if not inputOpened then
         inputOpened = true;
-        userInput = vim.fn.input("was you thinking/searching or wasting time (y/n)? ")
+        userInput = vim.fn.input("was you thinking/searching (y/n)? ")
       end
 
       if userInput == "y" then
