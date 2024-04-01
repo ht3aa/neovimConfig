@@ -119,7 +119,7 @@ local inputOpened = false;
 local function checkIfHeIsThinkingOrSearching()
   local diff_time = get_diff_between_past_and_current_time(time_spent_not_typing)
   local userInput = ""
-  if diff_time >= 60 then
+  if diff_time >= 180 then
     vim.schedule(function()
       if not inputOpened then
         inputOpened = true;
