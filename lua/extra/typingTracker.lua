@@ -1,14 +1,12 @@
-ProductivityTrackerInSeconds = 0
-local currentSecond
+Productivity_seconds = 0
+local char = 0
 local time = os.time()
 local timeOfLvimStart = os.time()
 local timeTable = os.date("*t", time)
 local time_spent_thinking_or_searching = 0
 local time_spent_not_typing = os.time()
-local second = timeTable.sec
 local root_patterns = { ".git" }
 
-currentSecond = second
 
 local rootFound = vim.fs.find(root_patterns, { upward = true })
 
@@ -28,6 +26,11 @@ local function execute_command(command)
   return result
 end
 
+  local function get_last_commit_info()
+    local gitLogCommand = "git log -1 --pretty=format:'%h %s'"
+    return execute_command(gitLogCommand)
+  end
+
 local function get_diff_between_past_and_current_time(oldTime)
   local end_time = os.time()
   local diff_time = os.difftime(end_time, oldTime)
@@ -36,7 +39,12 @@ local function get_diff_between_past_and_current_time(oldTime)
 end
 
 
-function SaveCodeTracker()
+function SaveTypingTracker()
+
+  if rootFound[1] == nil then
+    return
+  end
+
   -- Retrieve day, hour, minute, and second
   local year = timeTable.year
   local month = timeTable.month
@@ -45,13 +53,7 @@ function SaveCodeTracker()
   local minute = timeTable.min
   local lastSecond = timeTable.sec
 
-  -- Create a formatted string with the date and time information
 
-  local rootFound = vim.fs.find(root_patterns, { upward = true })
-
-  if rootFound[1] == nil then
-    return
-  end
 
   local root_dir = vim.fs.dirname(rootFound[1])
   -- Split the path string by directory separator "/"
@@ -68,17 +70,13 @@ function SaveCodeTracker()
 
 
 
-  local function get_last_commit_info()
-    local gitLogCommand = "git log -1 --pretty=format:'%h %s'"
-    return execute_command(gitLogCommand)
-  end
 
   local lastCommitInfo = get_last_commit_info()
 
 
 
   local dateTimeStr = string.format("%d,%d,%d,%d,%d,%d,%d,%d,%d,%s,%s,%s\n", year, month, day, hour, minute, lastSecond,
-    ProductivityTrackerInSeconds, get_diff_between_past_and_current_time(timeOfLvimStart),
+    Productivity_seconds, get_diff_between_past_and_current_time(timeOfLvimStart),
     time_spent_thinking_or_searching, root_dir, lastCommitInfo,
     FeatureName)
 
@@ -90,25 +88,6 @@ function SaveCodeTracker()
     file:close()
   else
     print("Error opening the file for appending data.")
-  end
-
-end
-
-local function trackKeyPressed()
-  -- Get the current date and time
-  time = os.time()
-
-  -- Convert the current time to a table with individual components
-  timeTable = os.date("*t", time)
-  second = timeTable.sec
-
-  if second < currentSecond then
-    currentSecond = 0
-  end
-
-  if currentSecond < second then
-    ProductivityTrackerInSeconds = ProductivityTrackerInSeconds + 1
-    currentSecond = second
   end
 
 end
@@ -137,10 +116,22 @@ local function checkIfHeIsThinkingOrSearching()
 end
 
 
+function Update_typing_productivity_seconds()
 
-vim.on_key(function()
-  trackKeyPressed()
   checkIfHeIsThinkingOrSearching()
-end)
+  local diff_time = get_diff_between_past_and_current_time(time)
+  char = char + 1
+
+  if diff_time == 1 and char >= 5 then
+    Productivity_seconds = Productivity_seconds + diff_time
+    char = 0
+    time = os.time()
+  elseif diff_time > 1 then
+    time = os.time()
+    char = 0
+  end
+  print("Productivity Seconds: " .. Productivity_seconds)
+end
+
 
 
