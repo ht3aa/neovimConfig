@@ -1,4 +1,4 @@
-Productivity_seconds = 0
+Total_productivity_seconds = 0
 local char = 0
 local time = os.time()
 local timeOfLvimStart = os.time()
@@ -6,6 +6,7 @@ local timeTable = os.date("*t", time)
 local time_spent_thinking_or_searching = 0
 local time_spent_not_typing = os.time()
 local root_patterns = { ".git" }
+Buffer_table = {}
 
 
 local rootFound = vim.fs.find(root_patterns, { upward = true })
@@ -26,10 +27,10 @@ local function execute_command(command)
   return result
 end
 
-  local function get_last_commit_info()
-    local gitLogCommand = "git log -1 --pretty=format:'%h %s'"
-    return execute_command(gitLogCommand)
-  end
+local function get_last_commit_info()
+  local gitLogCommand = "git log -1 --pretty=format:'%h %s'"
+  return execute_command(gitLogCommand)
+end
 
 local function get_diff_between_past_and_current_time(oldTime)
   local end_time = os.time()
@@ -40,7 +41,6 @@ end
 
 
 function SaveTypingTracker()
-
   if rootFound[1] == nil then
     return
   end
@@ -52,7 +52,13 @@ function SaveTypingTracker()
   local hour = timeTable.hour
   local minute = timeTable.min
   local lastSecond = timeTable.sec
+  local buffer_table_str = ""
+  for key, value in pairs(Buffer_table) do
+    print(key .. "=" .. value)
+    buffer_table_str = buffer_table_str .. key .. "=" .. value .. ","
+  end
 
+  buffer_table_str = string.sub(buffer_table_str, 1, -2)
 
 
   local root_dir = vim.fs.dirname(rootFound[1])
@@ -76,9 +82,8 @@ function SaveTypingTracker()
 
 
   local dateTimeStr = string.format("%d,%d,%d,%d,%d,%d,%d,%d,%d,%s,%s,%s\n", year, month, day, hour, minute, lastSecond,
-    Productivity_seconds, get_diff_between_past_and_current_time(timeOfLvimStart),
-    time_spent_thinking_or_searching, root_dir, lastCommitInfo,
-    FeatureName)
+    Total_productivity_seconds, get_diff_between_past_and_current_time(timeOfLvimStart),
+    time_spent_thinking_or_searching, root_dir, lastCommitInfo, buffer_table_str)
 
   if file then
     -- Append the formatted string to the file
@@ -89,10 +94,7 @@ function SaveTypingTracker()
   else
     print("Error opening the file for appending data.")
   end
-
 end
-
-
 
 local inputOpened = false;
 local function checkIfHeIsThinkingOrSearching()
@@ -108,7 +110,7 @@ local function checkIfHeIsThinkingOrSearching()
       if userInput == "y" then
         time_spent_thinking_or_searching = time_spent_thinking_or_searching + diff_time
       end
-        inputOpened = false;
+      inputOpened = false;
     end)
   end
 
@@ -116,22 +118,36 @@ local function checkIfHeIsThinkingOrSearching()
 end
 
 
-function Update_typing_productivity_seconds()
 
+local function update_buffer_productivity()
+  local current_buffer = vim.api.nvim_get_current_buf()
+  local buffer_name = vim.api.nvim_buf_get_name(current_buffer)
+
+  if buffer_name == "" then
+    return
+  end
+
+  if Buffer_table[buffer_name] == nil then
+    Buffer_table[buffer_name] = 1
+  elseif Buffer_table[buffer_name] ~= nil and buffer_name ~= "" and buffer_name ~= nil then
+    Buffer_table[buffer_name] = Buffer_table[buffer_name] + 1
+  end
+
+  print("buffe name: " .. buffer_name .. " " .. Buffer_table[buffer_name])
+end
+
+function Update_typing_productivity_seconds()
   checkIfHeIsThinkingOrSearching()
   local diff_time = get_diff_between_past_and_current_time(time)
   char = char + 1
 
   if diff_time == 1 and char >= 5 then
-    Productivity_seconds = Productivity_seconds + diff_time
+    update_buffer_productivity()
+    Total_productivity_seconds = Total_productivity_seconds + diff_time
     char = 0
     time = os.time()
   elseif diff_time > 1 then
     time = os.time()
     char = 0
   end
-  print("Productivity Seconds: " .. Productivity_seconds)
 end
-
-
-
