@@ -6,7 +6,7 @@ local timeTable = os.date("*t", time)
 local time_spent_thinking_or_searching = 0
 local time_spent_not_typing = os.time()
 local root_patterns = { ".git" }
-Buffer_table = {}
+Language_table = {}
 
 
 local rootFound = vim.fs.find(root_patterns, { upward = true })
@@ -53,7 +53,7 @@ function SaveTypingTracker()
   local minute = timeTable.min
   local lastSecond = timeTable.sec
   local buffer_table_str = ""
-  for key, value in pairs(Buffer_table) do
+  for key, value in pairs(Language_table) do
     print(key .. "=" .. value)
     buffer_table_str = buffer_table_str .. key .. "=" .. value .. ","
   end
@@ -121,19 +121,27 @@ end
 
 local function update_buffer_productivity()
   local current_buffer = vim.api.nvim_get_current_buf()
-  local buffer_name = vim.api.nvim_buf_get_name(current_buffer)
+  local buffer_path = vim.api.nvim_buf_get_name(current_buffer)
 
-  if buffer_name == "" then
+  if buffer_path == "" then
     return
   end
 
-  if Buffer_table[buffer_name] == nil then
-    Buffer_table[buffer_name] = 1
-  elseif Buffer_table[buffer_name] ~= nil and buffer_name ~= "" and buffer_name ~= nil then
-    Buffer_table[buffer_name] = Buffer_table[buffer_name] + 1
+  local buffer_path_parts = vim.split(buffer_path, "/")
+  local file = buffer_path_parts[#buffer_path_parts]
+  local file_parts = vim.split(file:lower(), "%.")
+  local file_type = file_parts[#file_parts]
+
+  if file_type == "" or file_type == nil then
+    return
   end
 
-  print("buffe name: " .. buffer_name .. " " .. Buffer_table[buffer_name])
+  if Language_table[file_type] == nil then
+    Language_table[file_type] = 1
+  else
+    Language_table[file_type] = Language_table[file_type] + 1
+  end
+
 end
 
 function Update_typing_productivity_seconds()
@@ -151,3 +159,4 @@ function Update_typing_productivity_seconds()
     char = 0
   end
 end
+
