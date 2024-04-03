@@ -10,11 +10,6 @@ reload "extra"
 
 lvim.builtin.nvimtree.setup.view.side = "right"
 
--- vim.cmd([[autocmd VimEnter * lue StartVideoTracker()]])
--- vim.cmd([[autocmd VimLeave * lua StopVideoTracker()]])
-
-
-
 
 
 vim.cmd([[autocmd VimLeave * lua SaveTypingTracker()]])

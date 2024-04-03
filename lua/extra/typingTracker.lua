@@ -2,7 +2,6 @@ Total_productivity_seconds = 0
 local char = 0
 local time = os.time()
 local timeOfLvimStart = os.time()
-local timeTable = os.date("*t", time)
 local time_spent_thinking_or_searching = 0
 local time_spent_not_typing = os.time()
 local root_patterns = { ".git" }
@@ -45,6 +44,7 @@ function SaveTypingTracker()
     return
   end
 
+  local timeTable = os.date("*t", time)
   -- Retrieve day, hour, minute, and second
   local year = timeTable.year
   local month = timeTable.month
@@ -55,10 +55,11 @@ function SaveTypingTracker()
   local buffer_table_str = ""
   for key, value in pairs(Language_table) do
     print(key .. "=" .. value)
-    buffer_table_str = buffer_table_str .. key .. "=" .. value .. ","
+    buffer_table_str = buffer_table_str .. key .. "=" .. value .. "$%#"
   end
 
-  buffer_table_str = string.sub(buffer_table_str, 1, -2)
+
+  buffer_table_str = string.sub(buffer_table_str, 1, -4)
 
 
   local root_dir = vim.fs.dirname(rootFound[1])
@@ -141,7 +142,6 @@ local function update_buffer_productivity()
   else
     Language_table[file_type] = Language_table[file_type] + 1
   end
-
 end
 
 function Update_typing_productivity_seconds()
@@ -159,4 +159,3 @@ function Update_typing_productivity_seconds()
     char = 0
   end
 end
-
