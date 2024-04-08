@@ -1,4 +1,14 @@
 local formatters = require "lvim.lsp.null-ls.formatters"
+local linters = require "lvim.lsp.null-ls.linters"
+
+linters.setup {
+  {
+    name = "eslint",
+    filetypes = { "javascript", "javascriptreact", "javascript.jsx", "typescript", "typescriptreact", "typescript.tsx" },
+  },
+}
+
+
 formatters.setup {
   {
     name = "prettier",

@@ -6,11 +6,8 @@ reload "core.options"
 reload "core.telescope"
 reload "core.whichKey"
 reload "core.bufferline"
+reload "core.nvimTree"
 reload "extra"
-
-lvim.builtin.nvimtree.setup.view.side = "right"
-
-
 
 vim.cmd([[autocmd VimLeave * lua SaveTypingTracker()]])
 vim.cmd([[autocmd TextChanged,TextChangedI * lua Update_typing_productivity_seconds()]])
