@@ -1,5 +1,11 @@
 lvim.plugins = {
   {
+    "wrxck/telegram-bot-lua"
+  },
+  {
+    "rcarriga/nvim-notify"
+  },
+  {
     "ht3aa/productivity.nvim"
   },
   {

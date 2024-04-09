@@ -1,13 +1,21 @@
 local formatters = require "lvim.lsp.null-ls.formatters"
 local linters = require "lvim.lsp.null-ls.linters"
 
-linters.setup {
-  {
-    name = "eslint",
-    filetypes = { "javascript", "javascriptreact", "javascript.jsx", "typescript", "typescriptreact", "typescript.tsx" },
-  },
-}
 
+local function has_eslint_config()
+  print(vim.fn.filereadable("eslint.config.js"))
+  if vim.fn.filereadable("eslint.config.js") == 1 then
+    linters.setup {
+      {
+        name = "eslint",
+        filetypes = { "javascript", "javascriptreact", "javascript.jsx", "typescript", "typescriptreact",
+          "typescript.tsx" },
+      }
+    }
+  end
+end
+
+has_eslint_config()
 
 formatters.setup {
   {
@@ -32,7 +40,7 @@ end
 local config = {
   virtual_text = true, -- enable virtual text
   signs = {
-    active = signs,     -- show signs
+    active = signs,    -- show signs
   },
   update_in_insert = true,
   underline = true,
@@ -53,4 +61,3 @@ vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
 vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, {
   border = "rounded",
 })
-
