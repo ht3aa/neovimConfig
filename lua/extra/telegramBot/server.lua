@@ -38,8 +38,8 @@ local function start_server()
   Server_job = vim.fn.jobstart({ 'node', server_script_path }, {
     on_stdout = function(_, data)
       local msg = table.concat(data, "\n")
-      if (string.find(msg, "/ht3aa")) then
-        vim.notify(msg:gsub("/ht3aa", ""), 'info')
+      if (string.find(msg, "@ht3aa")) then
+        vim.notify(msg:gsub("@ht3aa", ""), 'info')
 
         require("telescope").load_extension("notify")
         vim.cmd(":Telescope notify")

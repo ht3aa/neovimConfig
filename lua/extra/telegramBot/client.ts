@@ -1,5 +1,4 @@
 const { Telegraf } = require("telegraf");
-const { message } = require("telegraf/filters");
 const bot = new Telegraf("6955295791:AAEBY6cOFr1gPtLez6UNr4_0Vvo2yh36Ao0");
 
 const net = require("net");
@@ -19,10 +18,9 @@ client.on("end", () => {
   console.log("Disconnected from Neovim server");
 });
 
-bot.on("message", (ctx) => {
+bot.mention("ht3aa", (ctx) => {
   try {
-    if (ctx.message.text.includes("/ht3aa")) {
-      console.log(ctx.message.text);
+    if (ctx.message.text.includes("@ht3aa")) {
       client.write(`
 telegram bot message
 from:${ctx.from.first_name} @${ctx.from.username}
