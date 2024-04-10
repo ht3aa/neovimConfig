@@ -13,7 +13,7 @@ local function start_timer()
     -- Call the function
     vim.notify("Go walk and think, Write Down the solutions. You will solve the problem faster", 'error', {
       title = 'Walk',
-      timeout = 1000 * 60
+      timeout = 1000 * 30
     })
   end
 
