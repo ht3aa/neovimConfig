@@ -39,7 +39,9 @@ local function start_server()
     on_stdout = function(_, data)
       local msg = table.concat(data, "\n")
       if (string.find(msg, "@ht3aa")) then
-        vim.notify(msg:gsub("@ht3aa", ""), 'info')
+        vim.notify(msg:gsub("@ht3aa", ""), 'info', {
+          title = 'Telegram Bot notification',
+        })
 
         require("telescope").load_extension("notify")
         vim.cmd(":Telescope notify")
