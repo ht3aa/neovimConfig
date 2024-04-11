@@ -1,5 +1,8 @@
 lvim.plugins = {
   {
+    "mg979/vim-visual-multi",
+  },
+  {
     "wrxck/telegram-bot-lua"
   },
   {
