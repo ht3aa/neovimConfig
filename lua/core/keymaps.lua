@@ -5,3 +5,6 @@ lvim.keys.visual_mode["p"] = '"_dP'
 lvim.keys.visual_mode["K"] = ":m '<-2<CR>gv=gv"
 lvim.keys.visual_mode["J"] = ":m '>+1<CR>gv=gv"
 lvim.keys.insert_mode["jj"] = "<ESC>"
+lvim.keys.normal_mode["<A-l>"] = ":cnext<CR>"
+lvim.keys.normal_mode["<A-h>"] = ":cprev<CR>"
+

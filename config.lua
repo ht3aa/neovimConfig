@@ -1,5 +1,4 @@
 reload "core.alpha"
-reload "core.keymaps"
 reload "core.lir"
 reload "core.lsp"
 reload "core.options"
@@ -8,7 +7,7 @@ reload "core.whichKey"
 reload "core.bufferline"
 reload "core.nvimTree"
 reload "extra"
-
+reload "core.keymaps"
 
 vim.notify = require("notify")
 vim.cmd([[autocmd VimLeave * lua SaveTypingTracker()]])

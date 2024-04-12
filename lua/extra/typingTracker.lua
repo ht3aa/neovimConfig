@@ -12,7 +12,6 @@ local rootFound = vim.fs.find(root_patterns, { upward = true })
 
 if rootFound[1] == nil then
   vim.fn.input("not a git repo. make it now to record your productivity")
-  return
 end
 
 

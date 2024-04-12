@@ -10,12 +10,13 @@ lvim.plugins = {
       harpoon:setup()
       -- REQUIRED
 
-      vim.keymap.set("n", "<leader>oa", function() harpoon:list():add() end)
+      vim.keymap.set("n", "<leader>oo", function() harpoon:list():add() end)
       vim.keymap.set("n", "<leader>ot", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end)
 
-      vim.keymap.set("n", "<leader>og", function() harpoon:list():select(1) end)
+      vim.keymap.set("n", "<leader>of", function() harpoon:list():select(1) end)
       vim.keymap.set("n", "<leader>od", function() harpoon:list():select(2) end)
-      vim.keymap.set("n", "<leader>of", function() harpoon:list():select(3) end)
+      vim.keymap.set("n", "<leader>os", function() harpoon:list():select(3) end)
+      vim.keymap.set("n", "<leader>oa", function() harpoon:list():select(4) end)
     end
   },
   {

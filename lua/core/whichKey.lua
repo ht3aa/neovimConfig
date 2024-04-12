@@ -61,7 +61,7 @@ lvim.builtin.which_key.mappings.i = {
   s = { "<cmd>Git status<cr>", "Status" },
   a = { "<cmd>Git add .<cr>", "Add all" },
   l = { "<cmd>Git log<cr>", "Log" },
-  p = { "<cmd>Git push<cr>", "push origin main" },
+  p = { "<cmd>!git push origin main<cr>", "push origin main" },
 }
 lvim.builtin.which_key.mappings.a = {
   "<cmd>AerialToggle<cr>", "Aerial Toggle",
