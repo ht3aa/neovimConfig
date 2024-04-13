@@ -11,7 +11,7 @@ local function start_timer()
 
   local function timer_callback()
     -- Call the function
-    vim.notify("Go walk and think, Write Down the solutions. You will solve the problem faster", 'error', {
+    require("notify")("Go walk and think, Write Down the solutions. You will solve the problem faster", 'error', {
       title = 'Walk',
       timeout = 1000 * 30
     })

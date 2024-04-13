@@ -60,7 +60,7 @@ local function start_timer()
   local function timer_callback()
     -- Call the function
     local random_string = my_function()
-    vim.notify(random_string, 'info', {
+    require("notify")(random_string, 'info', {
       title = 'Doaa',
       timeout = 1000 * 60
     })
