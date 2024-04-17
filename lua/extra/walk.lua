@@ -1,6 +1,6 @@
 local function start_timer()
   -- Define the interval in milliseconds (30 minutes = 30 * 60 * 1000 milliseconds)
-  local interval = 1000 * 60 * 60 * 2
+  local interval = 1000 * 60 * 60 * 2 + 60000
 
   -- Start the timer
   local timer = vim.loop.new_timer()
