@@ -3,7 +3,6 @@ local linters = require "lvim.lsp.null-ls.linters"
 
 
 local function has_eslint_config()
-  print(vim.fn.filereadable("eslint.config.js"))
   if vim.fn.filereadable("eslint.config.js") == 1 then
     linters.setup {
       {

@@ -69,3 +69,7 @@ lvim.builtin.which_key.mappings.a = {
 
 
 
+lvim.builtin.which_key.mappings.m = {
+  u = { "<cmd>lua StartcopyLibFilesContent()<cr>", "update data" },
+  s = { "<cmd>lua require('telescope.builtin').live_grep({ cwd = '~/.config/lvim/lua/extra/myCode/' })<cr>", "search in myCode" }
+}

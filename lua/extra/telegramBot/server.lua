@@ -47,11 +47,6 @@ local function start_server()
         vim.cmd(":Telescope notify")
       end
     end,
-    on_stderr = function(_, data)
-      for _, line in ipairs(data) do
-        print(line)
-      end
-    end,
   })
 end
 

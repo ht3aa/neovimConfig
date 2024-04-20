@@ -53,7 +53,6 @@ function SaveTypingTracker()
   local lastSecond = timeTable.sec
   local buffer_table_str = ""
   for key, value in pairs(Language_table) do
-    print(key .. "=" .. value)
     buffer_table_str = buffer_table_str .. key .. "=" .. value .. "$%#"
   end
 
