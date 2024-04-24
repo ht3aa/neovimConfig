@@ -26,7 +26,6 @@ telegram bot message
 from:${ctx.from.first_name} @${ctx.from.username}
 msg: ${ctx.message.text}
 `);
-      ctx.reply("Your message has been sent to hasan.");
     }
   } catch (error) {
     console.log(error);

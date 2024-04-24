@@ -41,11 +41,8 @@ local function copyLibFilesContent(content, path, entries, folderIgnoreList, fil
       local subEntries = vim.fn.readdir(newPath)
 
 
-      if libCall or item == "lib" then
-        copyLibFilesContent(content, newPath, subEntries, folderIgnoreList, fileLanguagesList, 1, true)
-      end
       copyLibFilesContent(content, newPath, subEntries, folderIgnoreList, fileLanguagesList, 1, false)
-    elseif libCall and vim.tbl_contains(fileLanguagesList, fileLanguage) then
+    elseif vim.tbl_contains(fileLanguagesList, fileLanguage) then
       if not exists('~/.config/lvim/lua/extra/myCode/' .. fileLanguage .. '/') then
         pcall(os.execute, 'mkdir -p ~/.config/lvim/lua/extra/myCode/' .. fileLanguage .. '/')
       end
@@ -78,7 +75,7 @@ local folderIgnoreList = {
   "ssh",
   "important_notes",
 };
-local fileLanguagesList = { "js", "ts", "tsx", "jsx", "go" };
+local fileLanguagesList = { "js", "ts", "tsx", "jsx", "go", "php" };
 
 function StartcopyLibFilesContent()
   os.execute('rm -rf ~/.config/lvim/lua/extra/myCode/')
