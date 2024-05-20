@@ -8,6 +8,7 @@ require "core.bufferline"
 require "core.nvimTree"
 require "core.lazygit"
 require "core.keymaps"
+require "core.cmp"
 require "extra"
 
 vim.cmd([[autocmd VimLeave * lua SaveTypingTracker()]])

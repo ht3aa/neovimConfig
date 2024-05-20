@@ -71,7 +71,7 @@ function SaveTypingTracker()
   local lastFile = parts[#parts]
 
   -- Open the file in append mode
-  local file = io.open("/mnt/hasanweb/programming/workFiles/" .. lastFile .. ".csv", "a")
+  local file = io.open("/home/ht3aa/ht3aa/programming/workFiles/" .. lastFile .. ".csv", "a")
 
 
 
