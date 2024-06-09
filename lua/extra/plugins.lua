@@ -1,5 +1,8 @@
 lvim.plugins = {
   {
+"ActivityWatch/aw-watcher-vim",
+  },
+  {
     "diepm/vim-rest-console"
   },
   {
